@@ -19,6 +19,7 @@ test
 
 8. mvnw clean test
 
+test
 
 ## Git command
 
