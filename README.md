@@ -6,6 +6,7 @@
 
 2. mvnw compile
 
+test 
 3. mvnw clean package
 
 4. mvnw spring-boot:run
