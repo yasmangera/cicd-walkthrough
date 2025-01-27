@@ -43,6 +43,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=yasmangera_cicd-walkthrough -Dsonar.organization=yasmangera -Dsonar.host.url=https://sonarcloud.io -Dsonar.verbose=true
 
+      - name: Run Synk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
       - name: Run test with Maven
         run: mvn -B test
 
