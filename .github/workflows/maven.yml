@@ -43,6 +43,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
           -Dsonar.projectKey=yasmangera_cicd-walkthrough \
+          -Dsonar.organization=yasmangera \
+          -Dsonar.host.url=https://sonarcloud.io
 
       - name: Run test with Maven
         run: mvn -B test
