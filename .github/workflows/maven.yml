@@ -1,5 +1,3 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-
 name: Java CI with Maven
 
 on:
@@ -22,6 +20,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x ./mvnw
+
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -37,15 +38,19 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
+      - name: Verify Maven version
+        run: mvn -version
+
       - name: Build and analyze on SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=yasmangera_cicd-walkthrough -Dsonar.organization=yasmangera -Dsonar.host.url=https://sonarcloud.io -Dsonar.verbose=true
 
-      - name: Run Synk to check for vulnerabilities
+      - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: true
+        with:
+          args: dependency:tree -DoutputType=dot --batch-mode --non-recursive --file="pom.xml"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
